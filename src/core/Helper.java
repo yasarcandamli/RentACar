@@ -28,6 +28,15 @@ public class Helper {
             case "done":
                 message = "İşlem Başarılı!";
                 title = "Sonuç";
+                break;
+            case "notFound":
+                message = "Kayıt bulunamadı !";
+                title = "Bulunamadı";
+                break;
+            case "error":
+                message = "Hatalı işlem yaptınız !";
+                title = "Hata!";
+                break;
             default:
                 message = string;
                 title = "Mesaj";
