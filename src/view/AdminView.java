@@ -1,10 +1,14 @@
 package view;
 
 import business.BrandManager;
+import entity.Brand;
 import entity.User;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 public class AdminView extends Layout {
     private JPanel container;
@@ -16,8 +20,9 @@ public class AdminView extends Layout {
     private JScrollPane scrl_brand;
     private JTable tbl_brand;
     private User user;
-    private DefaultTableModel table_mdl_brand;
     private BrandManager brandManager;
+    private DefaultTableModel tmdl_brand = new DefaultTableModel();
+    private JPopupMenu brandMenu;
 
     public AdminView(User user) {
         this.brandManager = new BrandManager();
@@ -27,7 +32,38 @@ public class AdminView extends Layout {
         if (this.user == null) dispose();
 
         this.lbl_welcome.setText("Hoşgeldiniz: " + this.user.getUsername());
-    }
 
-    Object[] col_brand = {"Marka ID", "Marka Adı"};
+        Object[] col_brand = {"Marka ID", "Marka Adı"};
+        ArrayList<Brand> brandList = this.brandManager.findAll();
+        this.tmdl_brand.setColumnIdentifiers(col_brand);
+        for (Brand brand : brandList) {
+            Object[] obj = {brand.getId(), brand.getName()};
+            this.tmdl_brand.addRow(obj);
+        }
+
+        this.tbl_brand.setModel(this.tmdl_brand);
+        this.tbl_brand.getTableHeader().setReorderingAllowed(false);
+        this.tbl_brand.setEnabled(false);
+        this.tbl_brand.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                int selected_row = tbl_brand.rowAtPoint(e.getPoint());
+                tbl_brand.setRowSelectionInterval(selected_row, selected_row);
+                //Sağ tıklanıldığında pop_up menü görünmesi için!
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    brandMenu.show(tbl_brand, e.getX(), e.getY());
+                }
+            }
+        });
+
+        this.brandMenu = new JPopupMenu();
+
+        this.brandMenu.add("Ekle").addActionListener(e -> {
+            System.out.println("Ekle butonu tıklandı");
+        });
+        this.brandMenu.add("Güncelle");
+        this.brandMenu.add("Sil");
+
+        this.tbl_brand.setComponentPopupMenu(brandMenu);
+    }
 }
