@@ -18,6 +18,7 @@ public class Helper {
     }
 
     public static void showMessage(String string) {
+        optionPaneTR();
         String message;
         String title;
         switch (string) {
@@ -44,6 +45,17 @@ public class Helper {
         JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
     }
 
+    public static boolean confirm(String string) {
+        optionPaneTR();
+        String message;
+        if (string.equals("Sure")) {
+            message = "Bu işlemi yapmak istediğine emin misin?";
+        } else {
+            message = string;
+        }
+        return JOptionPane.showConfirmDialog(null, message, "Emin misin?", JOptionPane.YES_NO_OPTION) == 0;
+    }
+
     public static boolean isFieldEmpty(JTextField field) {
         return field.getText().trim().isEmpty();
     }
@@ -61,5 +73,11 @@ public class Helper {
             case "y" -> (Toolkit.getDefaultToolkit().getScreenSize().height - size.height) / 2;
             default -> 0;
         };
+    }
+
+    public static void optionPaneTR() {
+        UIManager.put("OptionPane.okButtonText", "Tamam");
+        UIManager.put("OptionPane.yesButtonText", "Evet");
+        UIManager.put("OptionPane.noButtonText", "Hayır");
     }
 }

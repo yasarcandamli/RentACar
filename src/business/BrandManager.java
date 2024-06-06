@@ -29,6 +29,7 @@ public class BrandManager {
         }
         return brandRowList;
     }
+
     public boolean save(Brand brand) {
         if (brand.getId() != 0) {
             Helper.showMessage("error");
@@ -45,5 +46,13 @@ public class BrandManager {
             Helper.showMessage("notFound");
         }
         return this.brandDao.update(brand);
+    }
+
+    public boolean delete(int id) {
+        if (this.getById(id) == null) {
+            Helper.showMessage(id + "ID kayıtlı marka bulunamadı!");
+            return false;
+        }
+        return this.brandDao.delete(id);
     }
 }
