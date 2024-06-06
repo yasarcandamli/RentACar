@@ -1,14 +1,13 @@
 package view;
 
 import business.BrandManager;
+import business.ModelManager;
 import core.Helper;
-import entity.Brand;
+import entity.Model;
 import entity.User;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -22,13 +21,20 @@ public class AdminView extends Layout {
     private JPanel pnl_brand;
     private JScrollPane scrl_brand;
     private JTable tbl_brand;
+    private JPanel pnl_model;
+    private JScrollPane scrl_model;
+    private JTable tbl_model;
     private User user;
     private BrandManager brandManager;
+    private ModelManager modelManager;
     private DefaultTableModel tmdl_brand = new DefaultTableModel();
-    private JPopupMenu brandMenu;
+    private DefaultTableModel tmdl_model = new DefaultTableModel();
+    private JPopupMenu brand_menu;
+    private JPopupMenu model_menu;
 
     public AdminView(User user) {
         this.brandManager = new BrandManager();
+        this.modelManager = new ModelManager();
         this.add(container);
         this.guiInitialize(1000, 500);
         this.user = user;
@@ -38,6 +44,52 @@ public class AdminView extends Layout {
 
         loadBrandTable();
         loadBrandComponent();
+
+        loadModelTable();
+        loadModelComponent();
+    }
+
+    private void loadModelComponent() {
+        this.model_menu = new JPopupMenu();
+        tableRowSelect(this.tbl_model, model_menu);
+        this.model_menu.add("Yeni").addActionListener(e -> {
+            ModelView modelView = new ModelView(new Model());
+            modelView.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    loadModelTable();
+                }
+            });
+        });
+        this.model_menu.add("Güncelle").addActionListener(e -> {
+            int selectModelId = this.getTableSelectedRow(tbl_model, 0);
+            ModelView modelView = new ModelView(this.modelManager.getById(selectModelId));
+            modelView.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    loadModelTable();
+                }
+            });
+        });
+        this.model_menu.add("Sil").addActionListener(e -> {
+            if (Helper.confirm("Sure")) {
+                int selectModelId = this.getTableSelectedRow(tbl_model, 0);
+                if (this.modelManager.delete(selectModelId)) {
+                    Helper.showMessage("done");
+                    loadModelTable();
+                } else {
+                    Helper.showMessage("error");
+                }
+            }
+        });
+        this.tbl_model.setComponentPopupMenu(model_menu);
+    }
+
+    public void loadModelTable() {
+        Object[] col_model = {"Model ID", "Marka Adı", "Model Adı", "Model Tipi", "Model Yılı", "Yakıt Tipi", "Vites Tipi"};
+        ArrayList<Object[]> modelList = this.modelManager.getForTable(col_model.length, this.modelManager.findAll());
+        createTable(this.tmdl_model, this.tbl_model, col_model, modelList);
+
     }
 
     public void loadBrandTable() {
@@ -47,51 +99,41 @@ public class AdminView extends Layout {
     }
 
     public void loadBrandComponent() {
-        this.tbl_brand.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                int selected_row = tbl_brand.rowAtPoint(e.getPoint());
-                tbl_brand.setRowSelectionInterval(selected_row, selected_row);
-                //Sağ tıklanıldığında pop_up menü görünmesi için!
-                if (SwingUtilities.isRightMouseButton(e)) {
-                    brandMenu.show(tbl_brand, e.getX(), e.getY());
-                }
-            }
-        });
-
-        this.brandMenu = new JPopupMenu();
-
-        this.brandMenu.add("Yeni").addActionListener(e -> {
-            BrandView brandView = new BrandView(null);
-            brandView.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosed(WindowEvent e) {
-                    loadBrandTable();
-                }
+        this.brand_menu = new JPopupMenu();
+        tableRowSelect(this.tbl_brand, brand_menu);
+        this.brand_menu.add("Yeni").addActionListener(e -> {
+                BrandView brandView = new BrandView(null);
+                brandView.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        loadModelTable();
+                        loadBrandTable();
+                    }
+                });
             });
-        });
-        this.brandMenu.add("Güncelle").addActionListener(e -> {
-            int selectBrandId = this.getTableSelectedRow(tbl_brand, 0);
-            BrandView brandView = new BrandView(this.brandManager.getById(selectBrandId));
-            brandView.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosed(WindowEvent e) {
-                    loadBrandTable();
-                }
-            });
-        });
-        this.brandMenu.add("Sil").addActionListener(e -> {
-            if (Helper.confirm("Sure")) {
+            this.brand_menu.add("Güncelle").addActionListener(e -> {
                 int selectBrandId = this.getTableSelectedRow(tbl_brand, 0);
-                if (this.brandManager.delete(selectBrandId)) {
-                    Helper.showMessage("done");
-                    loadBrandTable();
-                } else {
-                    Helper.showMessage("error");
+                BrandView brandView = new BrandView(this.brandManager.getById(selectBrandId));
+                brandView.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        loadModelTable();
+                        loadBrandTable();
+                    }
+                });
+            });
+            this.brand_menu.add("Sil").addActionListener(e -> {
+                if (Helper.confirm("Sure")) {
+                    int selectBrandId = this.getTableSelectedRow(tbl_brand, 0);
+                    if (this.brandManager.delete(selectBrandId)) {
+                        Helper.showMessage("done");
+                        loadModelTable();
+                        loadBrandTable();
+                    } else {
+                        Helper.showMessage("error");
+                    }
                 }
-            }
-        });
-
-        this.tbl_brand.setComponentPopupMenu(brandMenu);
+            });
+        this.tbl_brand.setComponentPopupMenu(brand_menu);
+        }
     }
-}
