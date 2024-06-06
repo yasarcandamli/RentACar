@@ -8,6 +8,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 public class AdminView extends Layout {
@@ -33,17 +35,17 @@ public class AdminView extends Layout {
 
         this.lbl_welcome.setText("Hoşgeldiniz: " + this.user.getUsername());
 
-        Object[] col_brand = {"Marka ID", "Marka Adı"};
-        ArrayList<Brand> brandList = this.brandManager.findAll();
-        this.tmdl_brand.setColumnIdentifiers(col_brand);
-        for (Brand brand : brandList) {
-            Object[] obj = {brand.getId(), brand.getName()};
-            this.tmdl_brand.addRow(obj);
-        }
+        loadBrandTable();
+        loadBrandComponent();
+    }
 
-        this.tbl_brand.setModel(this.tmdl_brand);
-        this.tbl_brand.getTableHeader().setReorderingAllowed(false);
-        this.tbl_brand.setEnabled(false);
+    public void loadBrandTable() {
+        Object[] col_brand = {"Marka ID", "Marka Adı"};
+        ArrayList<Object[]> brandList = this.brandManager.getForTable(col_brand.length);
+        this.createTable(this.tmdl_brand, this.tbl_brand, col_brand, brandList);
+    }
+
+    public void loadBrandComponent() {
         this.tbl_brand.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -58,10 +60,25 @@ public class AdminView extends Layout {
 
         this.brandMenu = new JPopupMenu();
 
-        this.brandMenu.add("Ekle").addActionListener(e -> {
-            System.out.println("Ekle butonu tıklandı");
+        this.brandMenu.add("Yeni").addActionListener(e -> {
+            BrandView brandView = new BrandView(null);
+            brandView.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    loadBrandTable();
+                }
+            });
         });
-        this.brandMenu.add("Güncelle");
+        this.brandMenu.add("Güncelle").addActionListener(e -> {
+            int selectBrandId = Integer.parseInt(tbl_brand.getValueAt(tbl_brand.getSelectedRow(), 0).toString());
+            BrandView brandView = new BrandView(this.brandManager.getById(selectBrandId));
+            brandView.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    loadBrandTable();
+                }
+            });
+        });
         this.brandMenu.add("Sil");
 
         this.tbl_brand.setComponentPopupMenu(brandMenu);
