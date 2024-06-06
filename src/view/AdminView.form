@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="container" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="10" bottom="10" right="10"/>
     <constraints>
-      <xy x="20" y="20" width="500" height="400"/>
+      <xy x="20" y="20" width="679" height="400"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -49,8 +49,8 @@
         <properties/>
         <border type="none"/>
         <children>
-          <grid id="229a6" binding="pnl_model" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
+          <grid id="229a6" binding="pnl_model" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="10" left="10" bottom="10" right="10"/>
             <constraints>
               <tabbedpane title="Modeller"/>
             </constraints>
@@ -59,7 +59,7 @@
             <children>
               <scrollpane id="89043" binding="scrl_model">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>
@@ -70,6 +70,88 @@
                   </component>
                 </children>
               </scrollpane>
+              <grid id="8b658" layout-manager="GridLayoutManager" row-count="2" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="acb56" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Marka"/>
+                    </properties>
+                  </component>
+                  <component id="353fa" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Tip"/>
+                    </properties>
+                  </component>
+                  <component id="554a" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Yakıt Tipi"/>
+                    </properties>
+                  </component>
+                  <component id="50532" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Vites Tipi"/>
+                    </properties>
+                  </component>
+                  <component id="99431" class="javax.swing.JComboBox" binding="cmb_s_model_brand">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="c94cd" class="javax.swing.JComboBox" binding="cmb_s_model_type">
+                    <constraints>
+                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="84907" class="javax.swing.JComboBox" binding="cmb_s_model_fuel">
+                    <constraints>
+                      <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="ed2dd" class="javax.swing.JComboBox" binding="cmb_s_model_gear">
+                    <constraints>
+                      <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="c651f" class="javax.swing.JButton" binding="btn_search_model">
+                    <constraints>
+                      <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="1" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Arama Yap"/>
+                    </properties>
+                  </component>
+                  <component id="ed355" class="javax.swing.JButton" binding="btn_cncl_model">
+                    <constraints>
+                      <grid row="1" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Sıfırla"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
             </children>
           </grid>
           <grid id="9e5a1" binding="pnl_brand" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">

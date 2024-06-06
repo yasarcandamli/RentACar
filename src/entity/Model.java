@@ -18,7 +18,7 @@ public class Model {
     }
 
     public enum Gear {
-        MANUEL,
+        MANUAL,
         AUTOMATIC
     }
 
