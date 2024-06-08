@@ -1,10 +1,12 @@
 package view;
 
 import business.BrandManager;
+import business.CarManager;
 import business.ModelManager;
 import core.ComboItem;
 import core.Helper;
 import entity.Brand;
+import entity.Car;
 import entity.Model;
 import entity.User;
 
@@ -32,18 +34,25 @@ public class AdminView extends Layout {
     private JComboBox cmb_s_model_gear;
     private JButton btn_search_model;
     private JButton btn_cncl_model;
+    private JPanel pnl_car;
+    private JScrollPane scrl_car;
+    private JTable tbl_car;
     private User user;
     private BrandManager brandManager;
     private ModelManager modelManager;
+    private CarManager carManager;
     private DefaultTableModel tmdl_brand = new DefaultTableModel();
     private DefaultTableModel tmdl_model = new DefaultTableModel();
+    private DefaultTableModel tmdl_car = new DefaultTableModel();
     private JPopupMenu brand_menu;
     private JPopupMenu model_menu;
+    private JPopupMenu car_menu;
     private Object[] col_model;
 
     public AdminView(User user) {
         this.brandManager = new BrandManager();
         this.modelManager = new ModelManager();
+        this.carManager = new CarManager();
         this.add(container);
         this.guiInitialize(1000, 500);
         this.user = user;
@@ -51,13 +60,60 @@ public class AdminView extends Layout {
 
         this.lbl_welcome.setText("Hoşgeldiniz: " + this.user.getUsername());
 
+        //Brand Tab Menu
         loadBrandTable();
         loadBrandComponent();
 
+        //Model Tab Menu
         loadModelTable(null);
         loadModelComponent();
-
         loadModelFilter();
+
+        //Car Tab Menu
+        loadCarTable();
+        loadCarComponent();
+    }
+
+    public void loadCarTable() {
+        Object[] col_car = {"ID", "Marka", "Model", "Plaka", "Renk", "KM", "Yıl", "Tip", "Yakıt Tipi", "Vites"};
+        ArrayList<Object[]> carList = this.carManager.getForTable(col_car.length, this.carManager.findAll());
+        this.createTable(this.tmdl_car, this.tbl_car, col_car, carList);
+    }
+
+    public void loadCarComponent() {
+        this.car_menu = new JPopupMenu();
+        tableRowSelect(this.tbl_car, car_menu);
+        this.car_menu.add("Yeni").addActionListener(e -> {
+            CarView carView = new CarView(new Car());
+            carView.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    loadCarTable();
+                }
+            });
+        });
+        this.car_menu.add("Güncelle").addActionListener(e -> {
+            int selectCarId = this.getTableSelectedRow(tbl_car, 0);
+            CarView carView = new CarView(this.carManager.getById(selectCarId));
+            carView.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    loadCarTable();
+                }
+            });
+        });
+        this.car_menu.add("Sil").addActionListener(e -> {
+            if (Helper.confirm("Sure")) {
+                int selectCarId = this.getTableSelectedRow(tbl_car, 0);
+                if (this.carManager.delete(selectCarId)) {
+                    Helper.showMessage("done");
+                    loadCarTable();
+                } else {
+                    Helper.showMessage("error");
+                }
+            }
+        });
+        this.tbl_car.setComponentPopupMenu(car_menu);
     }
 
     private void loadModelComponent() {
@@ -175,6 +231,7 @@ public class AdminView extends Layout {
                         loadModelTable(null);
                         loadBrandTable();
                         loadModelFilterBrand();
+                        loadCarTable();
                     }
                 });
             });
@@ -186,6 +243,7 @@ public class AdminView extends Layout {
                         loadModelTable(null);
                         loadBrandTable();
                         loadModelFilterBrand();
+                        loadCarTable();
                     } else {
                         Helper.showMessage("error");
                     }
