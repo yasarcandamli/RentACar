@@ -29,11 +29,11 @@ public class CarView extends Layout {
 
         this.cmb_color.setModel(new DefaultComboBoxModel<>(Car.Color.values()));
         for (Model model : this.modelManager.findAll()) {
-            this.cmb_model.addItem(model.getComboIem());
+            this.cmb_model.addItem(model.getComboItem());
         }
 
         if (this.car.getId() != 0) {
-            ComboItem selectedItem = car.getModel().getComboIem();
+            ComboItem selectedItem = car.getModel().getComboItem();
             this.cmb_model.getModel().setSelectedItem(selectedItem);
             this.cmb_color.getModel().setSelectedItem(car.getColor());
             this.fld_plate.setText(car.getPlate());

@@ -14,8 +14,7 @@ public class Car {
         BLUE,
         WHITE,
         GREEN,
-        AQUA,
-
+        AQUA
     }
 
     public Car() {

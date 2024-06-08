@@ -30,7 +30,7 @@ public class CarManager {
             Object[] rowObject = new Object[size];
             rowObject[i++] = obj.getId();
             rowObject[i++] = obj.getModel().getBrand().getName();
-            rowObject[i++] = obj.getBrand().getName();
+            rowObject[i++] = obj.getModel().getName();
             rowObject[i++] = obj.getPlate();
             rowObject[i++] = obj.getColor();
             rowObject[i++] = obj.getKm();
@@ -54,6 +54,7 @@ public class CarManager {
     public boolean update(Car car) {
         if (this.getById(car.getId()) == null) {
             Helper.showMessage(car.getId() + "ID kayıtlı araç bulunamadı!");
+            return false;
         }
         return this.carDao.update(car);
     }

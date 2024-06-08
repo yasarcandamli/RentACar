@@ -107,8 +107,8 @@ public class Model {
         this.brand = brand;
     }
 
-    public ComboItem getComboIem() {
-        return new ComboItem(this.getId(), this.getBrand().getName() + " - " + this.getYear() + " - " + this.getGear());
+    public ComboItem getComboItem() {
+        return new ComboItem(this.getId(), this.getBrand().getName() + " - " + this.getName() + " - " + this.getYear() + " - " + this.getGear());
     }
 
     @Override

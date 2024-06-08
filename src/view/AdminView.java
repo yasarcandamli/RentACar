@@ -74,46 +74,54 @@ public class AdminView extends Layout {
         loadCarComponent();
     }
 
-    public void loadCarTable() {
-        Object[] col_car = {"ID", "Marka", "Model", "Plaka", "Renk", "KM", "Yıl", "Tip", "Yakıt Tipi", "Vites"};
-        ArrayList<Object[]> carList = this.carManager.getForTable(col_car.length, this.carManager.findAll());
-        this.createTable(this.tmdl_car, this.tbl_car, col_car, carList);
+    public void loadBrandTable() {
+        Object[] col_brand = {"Marka ID", "Marka Adı"};
+        ArrayList<Object[]> brandList = this.brandManager.getForTable(col_brand.length);
+        this.createTable(this.tmdl_brand, this.tbl_brand, col_brand, brandList);
     }
 
-    public void loadCarComponent() {
-        this.car_menu = new JPopupMenu();
-        tableRowSelect(this.tbl_car, car_menu);
-        this.car_menu.add("Yeni").addActionListener(e -> {
-            CarView carView = new CarView(new Car());
-            carView.addWindowListener(new WindowAdapter() {
+    public void loadBrandComponent() {
+        this.brand_menu = new JPopupMenu();
+        tableRowSelect(this.tbl_brand, brand_menu);
+        this.brand_menu.add("Yeni").addActionListener(e -> {
+            BrandView brandView = new BrandView(null);
+            brandView.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
+                    loadModelTable(null);
+                    loadBrandTable();
+                    loadModelFilterBrand();
+                }
+            });
+        });
+        this.brand_menu.add("Güncelle").addActionListener(e -> {
+            int selectBrandId = this.getTableSelectedRow(tbl_brand, 0);
+            BrandView brandView = new BrandView(this.brandManager.getById(selectBrandId));
+            brandView.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    loadModelTable(null);
+                    loadBrandTable();
+                    loadModelFilterBrand();
                     loadCarTable();
                 }
             });
         });
-        this.car_menu.add("Güncelle").addActionListener(e -> {
-            int selectCarId = this.getTableSelectedRow(tbl_car, 0);
-            CarView carView = new CarView(this.carManager.getById(selectCarId));
-            carView.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosed(WindowEvent e) {
-                    loadCarTable();
-                }
-            });
-        });
-        this.car_menu.add("Sil").addActionListener(e -> {
+        this.brand_menu.add("Sil").addActionListener(e -> {
             if (Helper.confirm("Sure")) {
-                int selectCarId = this.getTableSelectedRow(tbl_car, 0);
-                if (this.carManager.delete(selectCarId)) {
+                int selectBrandId = this.getTableSelectedRow(tbl_brand, 0);
+                if (this.brandManager.delete(selectBrandId)) {
                     Helper.showMessage("done");
+                    loadModelTable(null);
+                    loadBrandTable();
+                    loadModelFilterBrand();
                     loadCarTable();
                 } else {
                     Helper.showMessage("error");
                 }
             }
         });
-        this.tbl_car.setComponentPopupMenu(car_menu);
+        this.tbl_brand.setComponentPopupMenu(brand_menu);
     }
 
     private void loadModelComponent() {
@@ -195,60 +203,52 @@ public class AdminView extends Layout {
     }
 
     public void loadModelTable(ArrayList<Object[]> modelList) {
-        this.col_model = new Object[] {"Model ID", "Marka Adı", "Model Adı", "Model Tipi", "Model Yılı", "Yakıt Tipi", "Vites Tipi"};
+        this.col_model = new Object[]{"Model ID", "Marka Adı", "Model Adı", "Model Tipi", "Model Yılı", "Yakıt Tipi", "Vites Tipi"};
         if (modelList == null) {
             modelList = this.modelManager.getForTable(this.col_model.length, this.modelManager.findAll());
         }
         createTable(this.tmdl_model, this.tbl_model, col_model, modelList);
     }
 
-    public void loadBrandTable() {
-        Object[] col_brand = {"Marka ID", "Marka Adı"};
-        ArrayList<Object[]> brandList = this.brandManager.getForTable(col_brand.length);
-        this.createTable(this.tmdl_brand, this.tbl_brand, col_brand, brandList);
+    public void loadCarTable() {
+        Object[] col_car = {"ID", "Marka", "Model", "Plaka", "Renk", "KM", "Yıl", "Tip", "Yakıt Tipi", "Vites Tipi"};
+        ArrayList<Object[]> carList = this.carManager.getForTable(col_car.length, this.carManager.findAll());
+        createTable(this.tmdl_car, this.tbl_car, col_car, carList);
     }
 
-    public void loadBrandComponent() {
-        this.brand_menu = new JPopupMenu();
-        tableRowSelect(this.tbl_brand, brand_menu);
-        this.brand_menu.add("Yeni").addActionListener(e -> {
-                BrandView brandView = new BrandView(null);
-                brandView.addWindowListener(new WindowAdapter() {
-                    @Override
-                    public void windowClosed(WindowEvent e) {
-                        loadModelTable(null);
-                        loadBrandTable();
-                        loadModelFilterBrand();
-                    }
-                });
-            });
-            this.brand_menu.add("Güncelle").addActionListener(e -> {
-                int selectBrandId = this.getTableSelectedRow(tbl_brand, 0);
-                BrandView brandView = new BrandView(this.brandManager.getById(selectBrandId));
-                brandView.addWindowListener(new WindowAdapter() {
-                    @Override
-                    public void windowClosed(WindowEvent e) {
-                        loadModelTable(null);
-                        loadBrandTable();
-                        loadModelFilterBrand();
-                        loadCarTable();
-                    }
-                });
-            });
-            this.brand_menu.add("Sil").addActionListener(e -> {
-                if (Helper.confirm("Sure")) {
-                    int selectBrandId = this.getTableSelectedRow(tbl_brand, 0);
-                    if (this.brandManager.delete(selectBrandId)) {
-                        Helper.showMessage("done");
-                        loadModelTable(null);
-                        loadBrandTable();
-                        loadModelFilterBrand();
-                        loadCarTable();
-                    } else {
-                        Helper.showMessage("error");
-                    }
+    public void loadCarComponent() {
+        this.car_menu = new JPopupMenu();
+        tableRowSelect(this.tbl_car, car_menu);
+        this.car_menu.add("Yeni").addActionListener(e -> {
+            CarView carView = new CarView(new Car());
+            carView.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    loadCarTable();
                 }
             });
-        this.tbl_brand.setComponentPopupMenu(brand_menu);
-        }
+        });
+        this.car_menu.add("Güncelle").addActionListener(e -> {
+            int selectCarId = this.getTableSelectedRow(tbl_car, 0);
+            CarView carView = new CarView(this.carManager.getById(selectCarId));
+            carView.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    loadCarTable();
+                }
+            });
+        });
+        this.car_menu.add("Sil").addActionListener(e -> {
+            if (Helper.confirm("Sure")) {
+                int selectCarId = this.getTableSelectedRow(tbl_car, 0);
+                if (this.carManager.delete(selectCarId)) {
+                    Helper.showMessage("done");
+                    loadCarTable();
+                } else {
+                    Helper.showMessage("error");
+                }
+            }
+        });
+        this.tbl_car.setComponentPopupMenu(car_menu);
     }
+}
