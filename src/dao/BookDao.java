@@ -35,7 +35,7 @@ public class BookDao {
     }
 
     public boolean save(Book book) {
-        String query = "INSERT INTO model " +
+        String query = "INSERT INTO book " +
                 "(" +
                 "book_car_id, " +
                 "book_name, " +
@@ -44,7 +44,7 @@ public class BookDao {
                 "book_mail, " +
                 "book_strt_date, " +
                 "book_fnsh_date, " +
-                "book_price, " +
+                "book_prc, " +
                 "book_case, " +
                 "book_note) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
@@ -56,10 +56,10 @@ public class BookDao {
             preparedStatement.setString(4, book.getMpno());
             preparedStatement.setString(5, book.getMail());
             preparedStatement.setDate(6, Date.valueOf(book.getStrt_date()));
-            preparedStatement.setDate(6, Date.valueOf(book.getFnsh_date()));
-            preparedStatement.setInt(7, book.getPrice());
-            preparedStatement.setString(8, book.getbCase());
-            preparedStatement.setString(9, book.getNote());
+            preparedStatement.setDate(7, Date.valueOf(book.getFnsh_date()));
+            preparedStatement.setInt(8, book.getPrice());
+            preparedStatement.setString(9, book.getbCase());
+            preparedStatement.setString(10, book.getNote());
             return preparedStatement.executeUpdate() != -1;
         } catch (SQLException e) {
             e.printStackTrace();
