@@ -2,6 +2,7 @@ package dao;
 
 import core.Db;
 import entity.Book;
+import entity.Car;
 import entity.Model;
 
 import java.sql.*;
@@ -15,6 +16,22 @@ public class BookDao {
     public BookDao() {
         this.connection = Db.getInstance();
         this.carDao = new CarDao();
+    }
+
+    public Book getById(int id) {
+        Book obj = null;
+        String query = "SELECT * FROM book WHERE book_id = ?";
+        try {
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                obj = this.match(resultSet);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return obj;
     }
 
     public ArrayList<Book> findAll() {
@@ -65,6 +82,18 @@ public class BookDao {
             e.printStackTrace();
         }
         return true;
+    }
+
+    public boolean delete(int book_id) {
+        String query = "DELETE FROM book WHERE book_id = ?";
+        try {
+            PreparedStatement pr = this.connection.prepareStatement(query);
+            pr.setInt(1, book_id);
+            return pr.executeUpdate() != -1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public Book match(ResultSet resultSet) throws SQLException {

@@ -92,7 +92,7 @@ public class CarDao {
                 "car_model_id, " +
                 "car_color, " +
                 "car_km, " +
-                "car_plate, " +
+                "car_plate " +
                 ")" +
                 " VALUES (?, ?, ?, ?);";
         try {
