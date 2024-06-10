@@ -5,6 +5,7 @@ import java.awt.*;
 
 public class Helper {
     public static void setTheme() {
+        optionPaneTR();
         for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
             if ("Nimbus".equals(info.getName())) {
                 try {
@@ -18,7 +19,6 @@ public class Helper {
     }
 
     public static void showMessage(String string) {
-        optionPaneTR();
         String message;
         String title;
         switch (string) {
@@ -46,7 +46,6 @@ public class Helper {
     }
 
     public static boolean confirm(String string) {
-        optionPaneTR();
         String message;
         if (string.equals("Sure")) {
             message = "Bu işlemi yapmak istediğine emin misin?";
