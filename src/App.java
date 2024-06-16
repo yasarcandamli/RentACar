@@ -1,13 +1,9 @@
-import business.UserManager;
 import core.Helper;
-import view.AdminView;
 import view.LoginView;
-
-import javax.swing.*;
 
 public class App {
     public static void main(String[] args) {
         Helper.setTheme();
-        LoginView loginView = new LoginView();
+        LoginView loginView = new LoginView(); //The project starts from here.
     }
 }
